@@ -57,8 +57,9 @@ class BT{
             cout<<index->data<<"\t";
             display(index->left);
             display(index->right);
+            
         }
-        cout<<"\n";
+     
     }
 };
 int main()
@@ -67,7 +68,7 @@ int main()
     BT *root,*newnode;
     BT b;
     do{
-        cout<<"1)Create\t2)insert\t3.Display\t4.Exit\nEnter choice:";
+        cout<<"\n1)Create\t2)insert\t3.Display\t4.Exit\nEnter choice:";
         cin>>ch;
         switch(ch)
         {
