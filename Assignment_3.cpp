@@ -27,7 +27,7 @@ class Graph{
         m[v][u]=1;
     }
 };
-Class list{
+class list{
     public:
     int data;
     list *next;
@@ -35,14 +35,14 @@ Class list{
     list(int x)
     {
         data=x;
-        next=NULL
+        next=NULL;
     }
     list(){
 
     }
     void insert(list *hed,list *temp)
     {
-        list *temp;
+        
         if(hed==NULL)
         {
             hed=temp;
@@ -54,12 +54,12 @@ Class list{
             hed=temp;
         }
     }
-}
+};
 int main()
 {
     Graph g;
     Graph *c;
-    list *head[20],*temp;
+    list *hed[20],*temp;
     list l;
     int ch,vertex,edges,v1,v2,i,j,cnt=0,no,d,n;
     do{
