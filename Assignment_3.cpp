@@ -1,30 +1,24 @@
-//assignment-3 : Graph
+//assignment-3 of flight path
 #include<iostream>
 using namespace std;
-class Graph{
-   public:
-    int v,e;
+class matrix{
+    public:
     int m[100][100];
-    Graph()
+    matrix()
     {
-
-    }
-    Graph(int x,int y)
-    {
-        v=x;
-        e=y;
-        for(int i=1;i<=x;i++)
+        for(int i=0;i<100;i++)
         {
-            for(int j=1;j<=x;j++)
+            for(int j=0;j<100;j++)
             {
                 m[i][j]=0;
             }
         }
     }
-    void edge(int u,int v)
+
+    void edge(int x,int y)
     {
-        m[u][v]=1;
-        m[v][u]=1;
+        m[x][y]=1;
+        m[y][x]=1;
     }
 };
 class list{
@@ -70,67 +64,67 @@ class list{
 };
 int main()
 {
-    Graph g;
-    Graph *c;
+    matrix am;
+    int ch,vertex,edges,v1,v2,no,d;
+    int arr[20];
     list *hed[20],*temp;
     list l;
-    int a[20];
-    int ch,vertex,edges,v1,v2,i,j,cnt=0,no,d,n;
-    for(int i = 0; i < 20; i++) {
-        hed[i] = NULL;
-    }
-    
     do{
         cout<<"\n1.Adjancancy matrix\t2.Output(AM)\t3.Adjacency list\t4.Output(AL)\t5.Exit\nEnter choice :";
         cin>>ch;
         switch(ch)
         {
-            case 1://input :-adjacency matrix
-                   cout<<"Enter no.of vertices :";
-                   cin>>vertex;
-                   cout<<"Enter no.of edges :";
-                   cin>>edges;
-                   c = new Graph(vertex,edges);
-                   cout<<"Enter vertex that have edges between them :"<<endl;
-                   for(i=0;i<edges;i++)
+            case 1://input 
+                    cout<<"Enter no.of vertices:";
+                    cin>>vertex;
+                    for(int i=0;i<vertex;i++)
+                    {
+                        cout<<"Vertex-"<<i+1<<":";
+                        cin>>arr[i];
+                    }
+                    cout<<"Enter no.of edges:";
+                    cin>>edges;
+                    for(int i=0;i<edges;i++)
+                    {
+                        cout<<"edge-"<<i+1<<endl;
+                        cout<<"\tvertiex-1 :";
+                        cin>>v1;
+                        cout<<"\tvertiex-2 :";
+                        cin>>v2;
+                        am.edge(v1,v2);
+                    }
+                    break;
+            case 2://output of AM
+                   for(int i=0;i<vertex;i++)
                    {
-                    cin>>v1>>v2;
-                    g.edge(v1,v2);
+                    cout<<"\t"<<arr[i];
+                   }
+                   cout<<"\n\n";
+                   for(int i=0;i<vertex;i++)
+                   {
+                    cout<<arr[i]<<"\t";
+                    for(int j=0;j<vertex;j++)
+                    {
+                        cout<<am.m[arr[i]][arr[j]]<<"\t";
+                    }
+                    cout<<"\n";
                    }
                    break;
-                
-            case 2://output :adjacency matrix
-                  cout<<"\t";
-                  for(i=1;i<=vertex;i++)
-                  {
-                    cout<<i<<"\t";
-                  }
-                  cout<<endl;
-                  for(i=1;i<=vertex;i++)
-                  {
-                    cout<<i<<"\t";
-                    for(j=1;j<=vertex;j++)
-                    {
-                        cout<<g.m[i][j]<<"\t";
-                    }
-                    cout<<endl;
-                  }
-                  break;
             case 3://adjacency list
                    cout<<"Enter no.of vertices :";
                    cin>>vertex;
                    cout<<"Enter vertex :"<<endl;
-                   for(i=0;i<vertex;i++)
+                   for(int i=0;i<vertex;i++)
                    {
                     cout<<"vertex-"<<i+1<<": ";
-                    cin>>a[i];
+                    cin>>arr[i];
                    }
-                   for(i=0;i<vertex;i++)
+                   for(int i=0;i<vertex;i++)
                    {
                     hed[i]=NULL;
-                    cout<<"Enter no.of adjacent vertices for vertex-"<<a[i]<<" :";
+                    cout<<"Enter no.of adjacent vertices for vertex-"<<arr[i]<<" :";
                     cin>>no;
-                    for(j=0;j<no;j++)
+                    for(int j=0;j<no;j++)
                     {
                         cout<<"vertex-"<<j+1<<" :";
                         cin>>d;
@@ -142,15 +136,14 @@ int main()
                         l.insert(hed[i],temp);
                         }
                     }
-                    cnt++;
-                   }
-
-                 break;
                    
+                   }
+                 break;
+
             case 4://display
-                   for(i=0;i<cnt;i++)
+                   for(int i=0;i<vertex;i++)
                    {
-                    cout<<a[i]<<"-->";
+                    cout<<arr[i]<<"-->";
                     l.display(hed[i]);
                     cout<<endl;
                    }
@@ -158,5 +151,4 @@ int main()
 
         }
     }while(ch!=5);
-
 }
