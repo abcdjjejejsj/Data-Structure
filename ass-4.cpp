@@ -41,46 +41,49 @@ class graph{
         }
     }
     void prims()
+{
+    final[0] = 1;
+    start[0] = -1;
+
+    for(int i = 0; i < v - 1; i++)
     {
-        final[0]=1;
-        start[0]=-1;
-        int min=9999;
-    for(int i=0;i<v-1;i++)
-    {
-        
-        int parent=-1,child=-1;
-        for(int j=0;j<v;j++)
+        int min = 9999; 
+        int parent = -1, child = -1;
+
+        for(int j = 0; j < v; j++)
         {
-            if(final[j]==1)
+            if(final[j] == 1) 
             {
-                for(int k=0;k<v;k++)
+                for(int k = 0; k < v; k++)
                 {
-                    if(m[j][k]!=0 && min>m[j][k] && final[k]!=-1)
+                    if(m[j][k] != 0 && final[k] != 1 && m[j][k] < min)
                     {
-                        min=m[j][k];
-                        parent=j;
-                        child=k;
+                        min = m[j][k];
+                        parent = j;
+                        child = k;
                     }
                 }
-                final[j]=1;
-                start[j]=-1;
-                cout<<"wt==="<<wt<<endl;
-                wt+=min;
             }
         }
-        edge.push_back(parent);
-        edge.push_back(child);
-        edge.push_back(min);
-        
-       
+
+        if (child != -1) 
+        {
+            final[child] = 1;
+            start[child] = -1;
+            edge.push_back(parent);
+            edge.push_back(child);
+            edge.push_back(min);
+            wt += min;
+        }
     }
 
-    cout<<"wt of MST = "<<wt;
-    for(int i=0;i<edge.size();i+=3)
+    cout << "wt of MST = " << wt << endl;
+    for(int i = 0; i < edge.size(); i += 3)
     {
-        cout<<edge[i]<<" "<<edge[i+1]<<"-->"<<edge[i+2]<<endl;
+        cout << edge[i] << " " << edge[i+1] << " --> " << edge[i+2] << endl;
     }
-    }
+}
+
 };
 int main()
 {
