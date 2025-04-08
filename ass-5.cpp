@@ -42,48 +42,47 @@ class graph{
         }
     }
 
+
 void DJ()
 {   
    dist[0]=0;
-   visited[0]=1;
-   current=0;
    int count=0;
-   while(count<v)
+
+   while(count < v)
    {
-    prev=current;
-    visited[current]=1;
+       int t=9999;
+       for(int i=0;i<v;i++)
+       {
+           if(visited[i]==0 && dist[i]<t)
+           {
+               t=dist[i];
+               current=i;
+           }
+       }
+
+       visited[current]=1;
+       count++;
+
+       for(int i=0;i<v;i++)
+       {
+           if(m[current][i]!=0 && visited[i]==0)
+           {
+               if(dist[current]+m[current][i] < dist[i])
+               {
+                   dist[i]=dist[current]+m[current][i];
+               }
+           }
+       }
+   }
+
+   cout<<"Shortest Path from Node 0 to all Nodes : ";
    for(int i=0;i<v;i++)
    {
-    if(m[current][i]!=0)
-    {
-        int temp=dist[current]+m[current][i];
-        if(temp<dist[i])
-        {
-            dist[i]=temp;
-        }
-    }
+       cout<<dist[i]<<" ";
    }
-   t=9999;
-   for(int i=0;i<v;i++)
-   {
-    if(m[current][i]!=0 && visited[i]!=1 && m[current][i]<t)
-    {
-        t=m[current][i];
-        current=i;
-    }
-   }
-   if(current!=prev)
-   {
-    count++;
-   }
- 
-   }
-   cout<<"shortest path :";
-   for(int i=0;i<dist.size();i++)
-   {
-    cout<<dist[i]<<" ";
-   }
+   cout<<endl;
 }
+
 
 };
 int main()
