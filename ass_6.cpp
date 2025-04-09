@@ -17,6 +17,7 @@ public:
         roll = r;
         name = n;
         marks = m;
+        pos=1;
     }
 } ;
 class Hash
@@ -43,29 +44,38 @@ class Hash
         string nav;
         cout << "Enter name : ";
         cin >> nav;
-        cout << "Entetr  roll no : ";
+        cout << "Enter roll no : ";
         cin >> rol;
         cout << "Enter marks : ";
         cin >> mark;
         int ky = hashv(rol);
-        if (s[ky].pos != -1)
+        if (s[ky].pos == -1)
         {
-            student *s[ky] = new student(rol, nav, mark);
+            s[ky] =student(rol, nav, mark);
         }
         else
         {
-            while (s[ky].pos != -1 && ky < size)
+            int cnt=0;
+            while (s[ky].pos != -1 && ky < size && cnt<size)
             {
                 ky++;
+                cnt++;
+                if(ky>=size)
+                {
+                    ky=0;
+                }
             }
-            if(s[ky].pos != -1)
+            if(s[ky].pos == -1)
             {
-                student *s[ky] = new student(rol, nav, mark);
+               s[ky]=student(rol, nav, mark);
+               s[ky].pos=1;
+               count++;
             }else{
                 cout<<"\nHash table is full.Can't insert more record\n";
             }
         }
-        count++;
+        
+       
     }
 
     void display()
@@ -89,7 +99,7 @@ int main()
     int ch;
     do
     {
-        cout << "1.Insert\t2.update\t3.delete\t4.Exit\nEnter choice: ";
+        cout << "1.Insert\t2.display\t3.delete\t4.Exit\nEnter choice: ";
         cin >> ch;
         switch (ch)
         {
