@@ -1,118 +1,128 @@
 #include <iostream>
 using namespace std;
-class student
-{
+
+class student {
 public:
     int roll;
     string name;
     int marks;
-    int pos;
-    student()
-    {
+    int pos; // -1 = Empty, -2 = Deleted, 1 = Occupied
 
+    student() {
+        roll = 0;
+        name = "";
+        marks = 0;
+        pos = -1;
     }
 
-    student(int r, string n, int m)
-    {
+    student(int r, string n, int m) {
         roll = r;
         name = n;
         marks = m;
-        pos=1;
+        pos = 1;
     }
-} ;
-class Hash
-{
-    public:
+};
+
+class Hash {
+public:
     student s[10];
     int size = 10;
     int count = 0;
-    Hash(){
-        for(int i=0;i<10;i++)
-        {
-        s[i].pos = -1;
-        }
-    }
-    
-    int hashv(int key)
-    {
-        int res = key % size;
-        return res;
-    }
-    void accept()
-    {
-        int rol, mark;
-        string nav;
-        cout << "Enter name : ";
-        cin >> nav;
-        cout << "Enter roll no : ";
-        cin >> rol;
-        cout << "Enter marks : ";
-        cin >> mark;
-        int ky = hashv(rol);
-        if (s[ky].pos == -1)
-        {
-            s[ky] =student(rol, nav, mark);
-        }
-        else
-        {
-            int cnt=0;
-            while (s[ky].pos != -1 && ky < size && cnt<size)
-            {
-                ky++;
-                cnt++;
-                if(ky>=size)
-                {
-                    ky=0;
-                }
-            }
-            if(s[ky].pos == -1)
-            {
-               s[ky]=student(rol, nav, mark);
-               s[ky].pos=1;
-               count++;
-            }else{
-                cout<<"\nHash table is full.Can't insert more record\n";
-            }
-        }
-        
-       
+
+    int hashv(int key) {
+        return key % size;
     }
 
-    void display()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            if(s[i].pos!=-1)
-            {
-                cout << i<< "]Name : " << s[i].name << endl;
-                cout << "Roll no : " << s[i].roll << endl;
-                cout << "Marks : " << s[i].marks << endl;
-                cout << "\n\n";
-            }
-            
+    void accept() {
+        int roll, mark;
+        string name;
+        cout << "\nEnter name : ";
+        cin >> name;
+        cout << "Enter roll no : ";
+        cin >> roll;
+        cout << "Enter marks : ";
+        cin >> mark;
+
+        int index = hashv(roll);
+
+        // Linear probing
+        int cnt = 0;
+        while ((s[index].pos == 1) && cnt < size) {
+            index = (index + 1) % size;
+            cnt++;
         }
+
+        if (cnt == size) {
+            cout << "\nHash table is full. Can't insert more records.\n";
+            return;
+        }
+
+        s[index] = student(roll, name, mark); // Constructor sets pos = 1
+        count++;
     }
-}; 
-int main()
-{
+
+    void display() {
+        cout << "\n--- Hash Table Contents ---\n";
+        for (int i = 0; i < size; i++) {
+            cout << i << "] ";
+            if (s[i].pos == 1) {
+                cout << "Name: " << s[i].name << ", Roll no: " << s[i].roll << ", Marks: " << s[i].marks << endl;
+            } else if (s[i].pos == -1) {
+                cout << "Empty" << endl;
+            } else if (s[i].pos == -2) {
+                cout << "Deleted" << endl;
+            }
+        }
+        cout << endl;
+    }
+
+    void del() {
+        int roll;
+        cout << "\nEnter Roll no to delete record: ";
+        cin >> roll;
+
+        int index = hashv(roll);
+        int cnt = 0;
+
+        while (cnt < size) {
+            if (s[index].pos == 1 && s[index].roll == roll) {
+                s[index].pos = -2;
+                cout << "Record with roll no " << roll << " deleted.\n";
+                return;
+            }
+            index = (index + 1) % size;
+            cnt++;
+        }
+
+        cout << "Record not found. Can't delete.\n";
+    }
+};
+
+int main() {
     Hash h;
-    int ch;
-    do
-    {
-        cout << "1.Insert\t2.display\t3.delete\t4.Exit\nEnter choice: ";
-        cin >> ch;
-        switch (ch)
-        {
-        case 1: // insert
+    int choice;
+
+    do {
+        cout << "\n1. Insert\n2. Display\n3. Delete\n4. Exit\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
                 h.accept();
                 break;
-        case 2://display
-              h.display();
-              break;
-        case 3://delete
-               break;
-        case 4://exit
-               break;
+            case 2:
+                h.display();
+                break;
+            case 3:
+                h.del();
+                break;
+            case 4:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice.\n";
         }
-    }while(ch!=4);
+    } while (choice != 4);
+
+    return 0;
 }
