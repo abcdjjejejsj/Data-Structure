@@ -5,8 +5,8 @@ class Track {
 public:
     int trackID;
     string title;
-    int duration; // in seconds
-    int pos; // -1 = Empty, -2 = Deleted, 1 = Occupied
+    int duration; 
+    int pos; 
 
     Track() {
         trackID = 0;
@@ -45,9 +45,10 @@ public:
 
         int index = hashv(id);
 
-        // Linear probing
+    
         int cnt = 0;
         while ((tracks[index].pos == 1) && cnt < size) {
+            cout<<"Collision occured at index : "<<index<<endl;;
             index = (index + 1) % size;
             cnt++;
         }
@@ -58,6 +59,7 @@ public:
         }
 
         tracks[index] = Track(id, t, dur);
+        cout<<"Element inserted at index : "<<index<<endl;
         count++;
     }
 
@@ -96,6 +98,53 @@ public:
 
         cout << "Track not found. Can't delete.\n";
     }
+    
+    void update()
+    {
+        int target;
+        cout<<"Enter ID to update music track : ";
+        cin>>target;
+        int index = hashv(target);
+        int cnt = 0;
+        while (cnt < size) {
+            if (tracks[index].pos == 1 && tracks[index].trackID == target) {
+                int id, dur;
+                string t;
+                cout << "\nEnter updated track title: ";
+                cin >> t;
+                cout << "Enter updated duration (in seconds): ";
+                cin >> dur;
+                tracks[index].title=t;
+                tracks[index].duration=dur;
+                cout << "Track with ID " << id << " updated successfully !\n";
+                return;
+            }
+            index = (index + 1) % size;
+            cnt++;
+        }
+
+        cout << "Track not found. Can't delete.\n";
+    }
+
+    void search()
+    {
+        int target;
+        cout<<"Enter ID to search music track : ";
+        cin>>target;
+        int index = hashv(target);
+        int cnt = 0;
+        while (cnt < size) {
+            if (tracks[index].pos == 1 && tracks[index].trackID == target) {
+                int id, dur;
+                cout<<"index-"<<index<<"\nID : "<<tracks[index].trackID<<"\nTitle : "<<tracks[index].title<<"\nDuration : "<<tracks[index].duration<<endl;
+                return;
+            }
+            index = (index + 1) % size;
+            cnt++;
+        }
+
+        cout << "Track not found. Can't delete.\n";
+    }
 };
 
 int main() {
@@ -103,7 +152,7 @@ int main() {
     int choice;
 
     do {
-        cout << "\n1. Add Track\n2. Show Library\n3. Delete Track\n4. Exit\nEnter choice: ";
+        cout << "\n1.Insert\n2.Display\n3.Delete\n4.Update\n5.Search\n6.Exit\nEnter choice: ";
         cin >> choice;
 
         switch (choice) {
@@ -117,12 +166,21 @@ int main() {
                 lib.del();
                 break;
             case 4:
-                cout << "Exiting...\n";
+                 lib.update();
+                 break;
+
+            case 5:
+                lib.search();
                 break;
+
+            case 6://exit
+            break;
+                
+            
             default:
                 cout << "Invalid choice.\n";
         }
-    } while (choice != 4);
+    } while (choice != 6);
 
     return 0;
 }
