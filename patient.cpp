@@ -1,31 +1,31 @@
 #include <iostream>
 using namespace std;
 
-class MedicalRecord {
+class Patient {
 public:
     int patientID;
     string name;
-    string diagnosis;
-    int pos; // -1 = Empty, -2 = Deleted, 1 = Occupied
+    string medicalHistory;
+    int pos;
 
-    MedicalRecord() {
+    Patient() {
         patientID = 0;
         name = "";
-        diagnosis = "";
+        medicalHistory = "";
         pos = -1;
     }
 
-    MedicalRecord(int id, string n, string d) {
+    Patient(int id, string n, string history) {
         patientID = id;
         name = n;
-        diagnosis = d;
+        medicalHistory = history;
         pos = 1;
     }
 };
 
 class MedicalRecordSystem {
 public:
-    MedicalRecord records[10];
+    Patient records[10];
     int size = 10;
     int count = 0;
 
@@ -35,38 +35,39 @@ public:
 
     void accept() {
         int id;
-        string n, d;
+        string n, history;
         cout << "\nEnter patient name: ";
         cin >> n;
         cout << "Enter patient ID: ";
         cin >> id;
-        cout << "Enter diagnosis: ";
-        cin >> d;
+        cout << "Enter medical history: ";
+        cin >> history;
 
         int index = hashv(id);
 
-        // Linear probing
         int cnt = 0;
-        while ((records[index].pos == 1) && cnt < size) {
-            index = (index + 1) % size;
+        while (records[index].pos == 1 && cnt < size) {
+            cout << "Collision occurred at index: " << index << endl;
+            index = (index + cnt * cnt) % size;  // Quadratic probing
             cnt++;
         }
 
         if (cnt == size) {
-            cout << "\nMedical record system is full. Cannot insert more records.\n";
+            cout << "\nMedical Record System is full. Can't insert more records.\n";
             return;
         }
 
-        records[index] = MedicalRecord(id, n, d);
+        records[index] = Patient(id, n, history);
+        cout << "Record inserted at index: " << index << endl;
         count++;
     }
 
     void display() {
-        cout << "\n--- Medical Record Table ---\n";
+        cout << "\n--- Medical Record System Contents ---\n";
         for (int i = 0; i < size; i++) {
             cout << i << "] ";
             if (records[i].pos == 1) {
-                cout << "Name: " << records[i].name << ", Patient ID: " << records[i].patientID << ", Diagnosis: " << records[i].diagnosis << "\n";
+                cout << "Name: " << records[i].name << ", Patient ID: " << records[i].patientID << ", Medical History: " << records[i].medicalHistory << "\n";
             } else if (records[i].pos == -1) {
                 cout << "Empty\n";
             } else if (records[i].pos == -2) {
@@ -78,7 +79,7 @@ public:
 
     void del() {
         int id;
-        cout << "\nEnter Patient ID to delete record: ";
+        cout << "\nEnter Patient ID to delete: ";
         cin >> id;
 
         int index = hashv(id);
@@ -87,14 +88,58 @@ public:
         while (cnt < size) {
             if (records[index].pos == 1 && records[index].patientID == id) {
                 records[index].pos = -2;
-                cout << "Record with Patient ID " << id << " deleted.\n";
+                cout << "Record with ID " << id << " deleted.\n";
                 return;
             }
-            index = (index + 1) % size;
+            index = (index + cnt * cnt) % size;  // Quadratic probing
             cnt++;
         }
 
-        cout << "Record not found. Cannot delete.\n";
+        cout << "Record not found. Can't delete.\n";
+    }
+    
+    void update() {
+        int target;
+        cout << "Enter Patient ID to update record: ";
+        cin >> target;
+        int index = hashv(target);
+        int cnt = 0;
+        while (cnt < size) {
+            if (records[index].pos == 1 && records[index].patientID == target) {
+                int id;
+                string n, history;
+                cout << "\nEnter updated patient name: ";
+                cin >> n;
+                cout << "Enter updated medical history: ";
+                cin >> history;
+                records[index].name = n;
+                records[index].medicalHistory = history;
+                cout << "Record with ID " << id << " updated successfully!\n";
+                return;
+            }
+            index = (index + cnt * cnt) % size;  // Quadratic probing
+            cnt++;
+        }
+
+        cout << "Record not found. Can't update.\n";
+    }
+
+    void search() {
+        int target;
+        cout << "Enter Patient ID to search record: ";
+        cin >> target;
+        int index = hashv(target);
+        int cnt = 0;
+        while (cnt < size) {
+            if (records[index].pos == 1 && records[index].patientID == target) {
+                cout << "Index: " << index << "\nID: " << records[index].patientID << "\nName: " << records[index].name << "\nMedical History: " << records[index].medicalHistory << endl;
+                return;
+            }
+            index = (index + cnt * cnt) % size;  // Quadratic probing
+            cnt++;
+        }
+
+        cout << "Record not found. Can't search.\n";
     }
 };
 
@@ -103,7 +148,7 @@ int main() {
     int choice;
 
     do {
-        cout << "\n1. Add Medical Record\n2. Display Records\n3. Delete Record\n4. Exit\nEnter choice: ";
+        cout << "\n1.Insert\n2.Display\n3.Delete\n4.Update\n5.Search\n6.Exit\nEnter choice: ";
         cin >> choice;
 
         switch (choice) {
@@ -117,12 +162,17 @@ int main() {
                 system.del();
                 break;
             case 4:
-                cout << "Exiting...\n";
+                system.update();
+                break;
+            case 5:
+                system.search();
+                break;
+            case 6:  // Exit
                 break;
             default:
                 cout << "Invalid choice.\n";
         }
-    } while (choice != 4);
+    } while (choice != 6);
 
     return 0;
 }
