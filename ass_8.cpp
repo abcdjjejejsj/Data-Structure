@@ -2,31 +2,37 @@
 #include<vector>
 using namespace std;
 
-void weightCalc(int a[],int p[],int q[],int n)
+void weightCalc(float a[],float p[],float q[],int n)
 {
-    int w[100][100];
+    float w[100][100];
     for(int i=0;i<n;i++)
     {
-        for(int j=0;i<n;j++)
+        for(int j=0;j<=n;j++)
         {
-            if((j-i)<n)
+            if(i<=j)
             {
                 if(j==i)
                 {
                     w[i][j]=q[i];
                 }else{
-                    w[i][j]=w[i][j-1]+p[j]+q[j];
+                    w[i][j]=w[i][j-1]+p[j-1]+q[j];
+                    cout<<"w["<<i<<"]["<<j<<"] = "<<w[i][j]<<"\tw[<<"<<i<<"]["<<(j-1)<<"= "<<w[i][j-1]<<"\tp["<<j<<"] = "<<p[j]<<"\tq["<<j<<"]="<<q[j]<<endl;
                 }
             }
         }
     }
-    for(int i=0;i<n;i++)
-    {
-        cout<<i<<"\t";
-        for(int j=0;j<n;j++)
+        for(int k=0;k<=n;k++)
         {
-            cout<<" "<<j;
-            cout<<" "<<w[i][j];
+            cout<<"  "<<k;
+        }
+        cout<<"\n\n";
+    for(int i=0;i<=n;i++)
+    {
+        cout<<i<<"  ";
+        for(int j=0;j<=n;j++)
+        {
+            
+            cout<<w[i][j]<<"  ";
         }
         cout<<endl;
     }
@@ -34,8 +40,9 @@ void weightCalc(int a[],int p[],int q[],int n)
 
 int main()
 {
-    int arr[100],pi[100],qi[100];
-    int s,key;
+    float arr[100],pi[100],qi[100];
+    float key;
+    int s;
     cout<<"Enter no.of keys : ";
     cin>>s;
     for(int i=0;i<s;i++)
