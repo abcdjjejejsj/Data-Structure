@@ -1,10 +1,10 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-
+float w[100][100],c[100][100];
 void weightCalc(float a[],float p[],float q[],int n)
 {
-    float w[100][100];
+
     for(int i=0;i<n;i++)
     {
         for(int j=0;j<=n;j++)
@@ -14,16 +14,18 @@ void weightCalc(float a[],float p[],float q[],int n)
                 if(j==i)
                 {
                     w[i][j]=q[i];
+                    
                 }else{
                     w[i][j]=w[i][j-1]+p[j-1]+q[j];
-                    cout<<"w["<<i<<"]["<<j<<"] = "<<w[i][j]<<"\tw[<<"<<i<<"]["<<(j-1)<<"= "<<w[i][j-1]<<"\tp["<<j<<"] = "<<p[j]<<"\tq["<<j<<"]="<<q[j]<<endl;
+                    //cout<<"w["<<i<<"]["<<j<<"] = "<<w[i][j]<<"\tw[<<"<<i<<"]["<<(j-1)<<"= "<<w[i][j-1]<<"\tp["<<j<<"] = "<<p[j]<<"\tq["<<j<<"]="<<q[j]<<endl; 
                 }
             }
         }
     }
-        for(int k=0;k<=n;k++)
+    cout<<"Weight table : \n";
+        for(int i=0;i<=n;i++)
         {
-            cout<<"  "<<k;
+            cout<<"     "<<i<<"  ";
         }
         cout<<"\n\n";
     for(int i=0;i<=n;i++)
@@ -31,19 +33,87 @@ void weightCalc(float a[],float p[],float q[],int n)
         cout<<i<<"  ";
         for(int j=0;j<=n;j++)
         {
+            if(w[i][j]==0)
+            {
+                cout<<"000"<<"     ";
+            }else{
+
+            cout<<w[i][j]<<"     ";
+            }
             
-            cout<<w[i][j]<<"  ";
         }
-        cout<<endl;
+        cout<<"\n\n";
     }
+}
+
+void cost(int n)
+{
+    float ss=0;
+    int cnt=0;
+    for(int i=0;i<=n;i++)
+    {
+        for(int j=cnt;j<n;j++)
+        {
+            if(i<=j)
+            {
+                if(i==j)
+                {
+                    c[i][j]=0;
+                }else{
+                    float min=9999;
+                    for(int k=i+1;k<=j;k++)
+                    {
+                        int temp=c[i][k-1]+c[k][j];
+                        if(temp<min)
+                        {
+                            min=temp;
+                        }
+                        
+                    }
+                    c[i][j]=min+w[i][j];
+                    ss=c[i][j];
+                  
+                }
+            }
+        }
+            cnt++;
+    }
+
+    cout<<"\n\nCost table :\n";
+     for(int i=0;i<=n;i++)
+        {
+            cout<<"     "<<i<<"  ";
+        }
+        cout<<"\n\n";
+    for(int i=0;i<=n;i++)
+    {
+        cout<<i<<"  ";
+        for(int j=0;j<=n;j++)
+        {
+            if(c[i][j]==0)
+            {
+                cout<<"000"<<"     ";
+            }else{
+
+            cout<<c[i][j]<<"     ";
+            }
+            
+        }
+        cout<<"\n\n";
+    }
+
 }
 
 int main()
 {
-    float arr[100],pi[100],qi[100];
-    float key;
+    // float arr[100],pi[100],qi[100];
+    // float key;
     int s;
-    cout<<"Enter no.of keys : ";
+    s=4;
+    float arr[]={10,20,30,40};
+    float pi[]={0.1,0.2,0.1,0.2};
+    float qi[]={0.1,0.05,0.15,0.05,0.05};
+    /*cout<<"Enter no.of keys : ";
     cin>>s;
     for(int i=0;i<s;i++)
     {
@@ -65,6 +135,8 @@ int main()
         cin>>key;
         qi[i]=key;
     }
+    */
     weightCalc(arr,pi,qi,s);
+    cost(s);
 
 }
