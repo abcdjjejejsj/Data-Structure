@@ -5,7 +5,7 @@ float w[100][100],c[100][100];
 void weightCalc(float a[],float p[],float q[],int n)
 {
 
-    for(int i=0;i<n;i++)
+    for(int i=0;i<=n;i++)
     {
         for(int j=0;j<=n;j++)
         {
@@ -37,7 +37,6 @@ void weightCalc(float a[],float p[],float q[],int n)
             {
                 cout<<"000"<<"     ";
             }else{
-
             cout<<w[i][j]<<"     ";
             }
             
@@ -48,47 +47,87 @@ void weightCalc(float a[],float p[],float q[],int n)
 
 void cost(int n)
 {
+    int r[100][100];
+    int tr;
     float ss=0;
     int cnt=0;
-    for(int i=0;i<=n;i++)
+    // for(int i=0;i<=n;i++)
+    // {
+    //     for(int j=cnt;j<n;j++)
+    //     {
+    //         if(i<=j)
+    //         {
+    //             if(i==j)
+    //             {
+    //                 c[i][j]=0;
+    //             }else{
+    //                 float min=9999;
+    //                 for(int k=i+1;k<=j;k++)
+    //                 {
+    //                     int temp=c[i][k-1]+c[k][j];
+    //                     if(temp<min)
+    //                     {
+    //                         min=temp;
+    //                     }
+                        
+    //                 }
+    //                 c[i][j]=min+w[i][j];
+    //                 ss=c[i][j];
+                  
+    //             }
+    //         }
+    //     }
+    //         cnt++;
+    // }
+
+    int i=0,j=0;
+    int a=i,b=j;
+    float min;
+    for(int h=0;h<(n+1);h++)
     {
-        for(int j=cnt;j<n;j++)
+        while(j<=n)
         {
-            if(i<=j)
+            if(i==j)
             {
-                if(i==j)
-                {
-                    c[i][j]=0;
-                }else{
-                    float min=9999;
+                c[i][j]=0;
+                i++;
+                j++;
+            }else{
+            min=9999;
                     for(int k=i+1;k<=j;k++)
                     {
-                        int temp=c[i][k-1]+c[k][j];
+                        float temp=c[i][k-1]+c[k][j];
                         if(temp<min)
                         {
                             min=temp;
+                            tr=k;
+
                         }
                         
                     }
                     c[i][j]=min+w[i][j];
-                    ss=c[i][j];
-                  
+                    r[i][j]=tr;
+
+                    i++;
+                    j++;
                 }
-            }
         }
-            cnt++;
+        a++;
+        b+=2;
+        i=0;
+        j=a;
     }
 
     cout<<"\n\nCost table :\n";
-     for(int i=0;i<=n;i++)
+     for(i=0;i<=n;i++)
         {
             cout<<"     "<<i<<"  ";
         }
         cout<<"\n\n";
-    for(int i=0;i<=n;i++)
+    for(i=0;i<=n;i++)
     {
         cout<<i<<"  ";
-        for(int j=0;j<=n;j++)
+        for(j=0;j<=n;j++)
         {
             if(c[i][j]==0)
             {
@@ -96,6 +135,28 @@ void cost(int n)
             }else{
 
             cout<<c[i][j]<<"     ";
+            }
+            
+        }
+        cout<<"\n\n";
+    }
+    cout<<"\n\nRoot table :\n";
+     for(i=0;i<=n;i++)
+        {
+            cout<<"      "<<i;
+        }
+        cout<<"\n\n";
+    for(i=0;i<=n;i++)
+    {
+        cout<<i<<"     ";
+        for(j=0;j<=n;j++)
+        {
+            if(r[i][j]==0)
+            {
+                cout<<"0"<<"      ";
+            }else{
+
+            cout<<r[i][j]<<"      ";
             }
             
         }
